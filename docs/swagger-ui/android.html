@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Configuration - OpenAPI Docs</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css">
+
+    <style>
+        :root {
+            --primary-color: #3DDC84;
+            --secondary-color: #02569B;
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 3px solid var(--primary-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .android-badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(61, 220, 132, 0.3);
+        }
+
+        .android-badge::before {
+            content: "🤖";
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .swagger-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            margin-top: 2rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .info-panel {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-panel h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-panel h3::before {
+            content: "📱";
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-card h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient);
+            color: white;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .quick-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .quick-link {
+            background: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quick-link:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(61, 220, 132, 0.15);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: white;
+            margin-top: 3rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Android Configuration API</h1>
+        <p>OpenAPI документация Android-части Flutter проекта "Project Program"</p>
+        <div class="android-badge">Android + Flutter + Gradle</div>
+    </div>
+
+    <div class="container">
+        <div class="info-panel">
+            <h3>📋 Обзор конфигурации</h3>
+            <p>Документация описывает все конфигурационные файлы Android-части Flutter проекта, включая Gradle сборку, манифесты, ресурсы и исходный код.</p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4><span class="card-icon">⚙️</span> Gradle Configuration</h4>
+                    <p>Файлы сборки: build.gradle, build.gradle.kts, settings.gradle. Определяют зависимости, версии SDK и настройки сборки.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4><span class="card-icon">📄</span> Android Manifest</h4>
+                    <p>Манифесты приложения: main, debug, profile. Определяют компоненты, разрешения и метаданные приложения.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4><span class="card-icon">🎨</span> Resources & Styles</h4>
+                    <p>Ресурсы приложения: стили, темы, drawable. Включает светлую и темную тему, фон загрузочного экрана.</p>
+                </div>
+
+                <div class="info-card">
+                    <h4><span class="card-icon">💻</span> Kotlin Code</h4>
+                    <p>Исходный код: MainActivity.kt - точка входа в Android-приложение, наследует от FlutterActivity.</p>
+                </div>
+            </div>
+
+            <div class="quick-links">
+                <a href="#swagger-ui" class="quick-link">
+                    <span>🚀</span> Открыть Swagger UI
+                </a>
+                <a href="../openapi/android.yaml" download class="quick-link">
+                    <span>📥</span> Скачать OpenAPI Spec
+                </a>
+                <a href="ios.html" class="quick-link">
+                    <span>🍎</span> iOS Documentation
+                </a>
+                <a href="https://developer.android.com" target="_blank" class="quick-link">
+                    <span>📚</span> Android Docs
+                </a>
+            </div>
+        </div>
+
+        <div class="swagger-container">
+            <div id="swagger-ui"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>📱 Android Flutter Configuration Documentation • Version 1.0.0 • Built with OpenAPI 3.0</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8; font-size: 0.9rem;">
+            Package: com.ourteam.kovrigin.project_program • Min SDK: 21 • Target SDK: 34
+        </p>
+    </footer>
+
+    <!-- Swagger UI Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js"></script>
+
+    <script>
+        // Проверка перед загрузкой
+        console.log("🚀 Загрузка Android OpenAPI документации...");
+
+        window.onload = function() {
+            // Путь к OpenAPI спецификации
+            const openApiUrl = "../openapi/android.yaml";
+
+            console.log("📂 Загрузка спецификации из:", openApiUrl);
+
+            // Конфигурация Swagger UI
+            const ui = SwaggerUIBundle({
+                url: openApiUrl,
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                defaultModelsExpandDepth: 2,
+                defaultModelExpandDepth: 2,
+                docExpansion: 'list',
+                operationsSorter: 'method',
+                tagsSorter: 'alpha',
+                validatorUrl: null,
+
+                // Кастомизация темы
+                theme: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                        }
+                    }
+                },
+
+                // Обработчики событий
+                onComplete: function() {
+                    console.log("✅ Android OpenAPI документация успешно загружена!");
+
+                    // Добавляем кастомные стили для Swagger
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        .swagger-ui .opblock-tag {
+                            background: linear-gradient(135deg, #3DDC84 0%, #02569B 100%);
+                            color: white;
+                            border-radius: 8px;
+                            padding: 10px 15px;
+                            margin-bottom: 10px;
+                        }
+
+                        .swagger-ui .opblock {
+                            border-radius: 8px;
+                            border: 1px solid #e0e0e0;
+                        }
+
+                        .swagger-ui .opblock.opblock-get {
+                            border-color: #3DDC84;
+                        }
+
+                        .swagger-ui .opblock.opblock-get .opblock-summary-method {
+                            background: #3DDC84;
+                        }
+
+                        .information-container {
+                            display: none;
+                        }
+                    `;
+                    document.head.appendChild(style);
+                },
+
+                onFailure: function(error) {
+                    console.error("❌ Ошибка загрузки OpenAPI:", error);
+
+                    // Показываем дружественное сообщение об ошибке
+                    document.getElementById('swagger-ui').innerHTML = `
+                        <div style="padding: 40px; text-align: center; color: #333;">
+                            <div style="font-size: 60px; margin-bottom: 20px;">🤖</div>
+                            <h2 style="color: #d32f2f; margin-bottom: 20px;">Ошибка загрузки документации</h2>
+                            <p style="margin-bottom: 20px; line-height: 1.6;">
+                                Не удалось загрузить OpenAPI спецификацию для Android конфигурации.
+                            </p>
+                            <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; max-width: 600px; margin: 0 auto; text-align: left;">
+                                <h4 style="margin-top: 0;">🛠️ Возможные решения:</h4>
+                                <ul style="margin-bottom: 0;">
+                                    <li>Убедитесь что файл <code>docs/openapi/android.yaml</code> существует</li>
+                                    <li>Запустите локальный сервер: <code>python3 -m http.server 8000</code></li>
+                                    <li>Откройте <a href="http://localhost:8000/docs/swagger-ui/android.html" style="color: #3DDC84;">http://localhost:8000/docs/swagger-ui/android.html</a></li>
+                                    <li>Проверьте консоль браузера (F12) для деталей ошибки</li>
+                                </ul>
+                            </div>
+                            <div style="margin-top: 30px;">
+                                <button onclick="window.location.reload()" style="
+                                    background: linear-gradient(135deg, #3DDC84 0%, #02569B 100%);
+                                    color: white;
+                                    border: none;
+                                    padding: 12px 24px;
+                                    border-radius: 8px;
+                                    font-size: 16px;
+                                    cursor: pointer;
+                                    margin: 0 10px;
+                                ">🔄 Обновить страницу</button>
+
+                                <button onclick="location.href='./test-setup.html'" style="
+                                    background: #f5f5f5;
+                                    color: #333;
+                                    border: 2px solid #ddd;
+                                    padding: 12px 24px;
+                                    border-radius: 8px;
+                                    font-size: 16px;
+                                    cursor: pointer;
+                                    margin: 0 10px;
+                                ">🧪 Запустить тест</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            window.ui = ui;
+        };
+
+        // Тестовый запрос для проверки доступности файла
+        fetch("../openapi/android.yaml")
+            .then(response => {
+                console.log("📊 Статус загрузки файла:", response.status);
+                return response.text();
+            })
+            .then(text => {
+                console.log("📄 Размер файла:", text.length, "символов");
+                console.log("✅ Файл доступен и валиден");
+            })
+            .catch(error => {
+                console.error("❌ Файл недоступен:", error);
+                console.log("💡 Запустите локальный сервер: python3 -m http.server 8000");
+            });
+    </script>
+</body>
+</html>

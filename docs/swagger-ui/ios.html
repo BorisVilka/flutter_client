@@ -4,23 +4,51 @@
     <title>iOS Configuration - OpenAPI</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css">
     <style>
-        body { margin: 0; padding: 20px; background: #f5f5f5; }
-        #swagger-ui { max-width: 1200px; margin: 0 auto; }
+        html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+        *, *:before, *:after { box-sizing: inherit; }
+        body { margin: 0; padding: 0; background: #fafafa; }
+        #swagger-ui { padding: 20px; }
     </style>
 </head>
 <body>
     <div id="swagger-ui"></div>
     
     <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js"></script>
     <script>
         window.onload = function() {
-            const ui = SwaggerUIBundle({
-                url: "../openapi/ios.yaml",  <!-- Путь к вашему файлу -->
+            // Используем window.ui для доступа из консоли
+            window.ui = SwaggerUIBundle({
+                //  ВАЖНО: Путь относительно HTML файла
+                url: "../openapi/ios.yaml",  
                 dom_id: '#swagger-ui',
+                deepLinking: true,
                 presets: [
-                    SwaggerUIBundle.presets.apis
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
                 ],
-                layout: "BaseLayout"
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                validatorUrl: null, // Отключаем валидацию
+                onComplete: function() {
+                    console.log(" Swagger UI загружен!");
+                },
+                onFailure: function(error) {
+                    console.error(" Ошибка загрузки:", error);
+                    document.getElementById('swagger-ui').innerHTML = 
+                        '<div style="color: red; padding: 20px;">' +
+                        '<h3>Ошибка загрузки OpenAPI файла</h3>' +
+                        '<p>Проверьте:</p>' +
+                        '<ul>' +
+                        '<li>Файл существует: docs/openapi/ios.yaml</li>' +
+                        '<li>Запущен локальный сервер (python -m http.server 8000)</li>' +
+                        '<li>Открыт http://localhost:8000/docs/swagger-ui/ios.html</li>' +
+                        '</ul>' +
+                        '<p>Ошибка: ' + error + '</p>' +
+                        '</div>';
+                }
             });
         };
     </script>

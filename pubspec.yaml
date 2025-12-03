@@ -47,15 +47,7 @@ dev_dependencies:
     sdk: flutter
 
 
-documentation:
-  openapi_specs:
-    - path: docs/openapi/ios.yaml
-      title: iOS Configuration
-    - path: docs/openapi/android.yaml
-      title: Android Configuration
-  api_docs: docs/swagger-ui/index.html
 
-  
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -73,6 +65,13 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  documentation:
+    openapi_specs:
+      ios: "docs/openapi/ios.yaml"
+      android: "docs/openapi/android.yaml"
+    
+    build_instructions: "docs/BUILD.md"
 
   # To add assets to your application, add an assets section, like this:
   # assets:

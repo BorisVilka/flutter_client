@@ -1,0 +1,337 @@
+openapi: 3.0.0
+info:
+  title: Android Flutter Configuration API
+  description: |
+    OpenAPI документация Android-части Flutter проекта.
+    Описывает конфигурационные файлы, сборку и архитектуру.
+  version: 1.0.0
+  contact:
+    name: Development Team
+    email: dev@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: file:///android
+    description: Локальная директория Android конфигурации
+  - url: gradle://project
+    description: Gradle проект сборки
+
+tags:
+  - name: Gradle
+    description: Файлы конфигурации сборки Gradle
+  - name: Manifest
+    description: Android манифесты
+  - name: Resources
+    description: Ресурсы приложения
+  - name: Kotlin
+    description: Kotlin исходный код
+  - name: Build
+    description: Конфигурация сборки
+
+paths:
+  /app/build.gradle:
+    get:
+      tags: [Gradle]
+      summary: Основная конфигурация сборки приложения
+      description: |
+        Главный файл сборки Android приложения на Flutter.
+        Использует Groovy DSL для настройки проекта.
+      responses:
+        '200':
+          description: Успешное получение конфигурации
+          content:
+            text/gradle:
+              schema:
+                $ref: '#/components/schemas/GradleConfig'
+          examples:
+            gradleExample:
+              summary: Пример конфигурации
+              value:
+                applicationId: "com.ourteam.kovrigin.project_program"
+                minSdkVersion: "flutter.minSdkVersion"
+                targetSdkVersion: "flutter.targetSdkVersion"
+
+  /app/build.gradle.kts:
+    get:
+      tags: [Gradle]
+      summary: Альтернативная конфигурация на Kotlin DSL
+      description: |
+        Тот же функционал что и build.gradle, но на Kotlin DSL.
+        Предоставляет типобезопасность и современный синтаксис.
+      responses:
+        '200':
+          description: Успешное получение Kotlin DSL конфигурации
+
+  /app/src/main/AndroidManifest.xml:
+    get:
+      tags: [Manifest]
+      summary: Основной манифест приложения
+      description: |
+        Главный файл манифеста Android приложения.
+        Определяет структуру, разрешения и компоненты приложения.
+      parameters:
+        - $ref: '#/components/parameters/BuildType'
+      responses:
+        '200':
+          description: Успешное получение манифеста
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/AndroidManifest'
+
+  /app/src/debug/AndroidManifest.xml:
+    get:
+      tags: [Manifest]
+      summary: Debug манифест
+      description: Манифест для debug-сборки (только INTERNET разрешение)
+      responses:
+        '200':
+          description: Успешно
+
+  /app/src/main/kotlin/com/ourteam/kovrigin/project_program/MainActivity.kt:
+    get:
+      tags: [Kotlin]
+      summary: Главная активность приложения
+      description: |
+        Точка входа в Android-приложение Flutter.
+        Наследует от FlutterActivity для отображения Flutter UI.
+      responses:
+        '200':
+          description: Успешное получение MainActivity
+          content:
+            text/kotlin:
+              schema:
+                $ref: '#/components/schemas/MainActivity'
+
+  /app/src/main/res/values/styles.xml:
+    get:
+      tags: [Resources]
+      summary: Стили приложения
+      description: Тематизация приложения (светлая тема)
+      responses:
+        '200':
+          description: Успешное получение стилей
+
+  /app/src/main/res/values-night/styles.xml:
+    get:
+      tags: [Resources]
+      summary: Стили для темной темы
+      description: Тематизация для темного режима
+      responses:
+        '200':
+          description: Успешное получение ночных стилей
+
+  /app/src/main/res/drawable/launch_background.xml:
+    get:
+      tags: [Resources]
+      summary: Фон экрана загрузки
+      description: Drawable для splash screen (белый фон)
+      responses:
+        '200':
+          description: Успешное получение фона загрузки
+
+  /build.gradle:
+    get:
+      tags: [Gradle]
+      summary: Корневая конфигурация Gradle
+      description: Общие настройки для всех модулей проекта
+      responses:
+        '200':
+          description: Успешно
+
+  /build.gradle.kts:
+    get:
+      tags: [Gradle]
+      summary: Корневая конфигурация на Kotlin DSL
+      description: Альтернативная конфигурация корневого build.gradle
+      responses:
+        '200':
+          description: Успешно
+
+  /settings.gradle:
+    get:
+      tags: [Gradle]
+      summary: Настройки проекта Gradle
+      description: Определяет структуру проекта и плагины
+      responses:
+        '200':
+          description: Успешно
+
+components:
+  schemas:
+    GradleConfig:
+      type: object
+      description: Конфигурация Gradle сборки
+      properties:
+        applicationId:
+          type: string
+          example: "com.ourteam.kovrigin.project_program"
+          description: Уникальный идентификатор приложения
+        namespace:
+          type: string
+          example: "com.ourteam.kovrigin.project_program"
+          description: Пространство имен пакета
+        minSdkVersion:
+          type: string
+          example: "flutter.minSdkVersion"
+          description: Минимальная версия Android SDK
+        targetSdkVersion:
+          type: string
+          example: "flutter.targetSdkVersion"
+          description: Целевая версия Android SDK
+        versionCode:
+          type: integer
+          example: 1
+          description: Код версии для магазина приложений
+        versionName:
+          type: string
+          example: "1.0"
+          description: Человеко-читаемая версия
+        buildTypes:
+          type: object
+          properties:
+            debug:
+              type: object
+            release:
+              type: object
+            profile:
+              type: object
+
+    AndroidManifest:
+      type: object
+      description: Конфигурация Android манифеста
+      properties:
+        package:
+          type: string
+          example: "com.ourteam.kovrigin.project_program"
+          description: Пакет приложения
+        application:
+          type: object
+          properties:
+            label:
+              type: string
+              example: "project_program"
+            icon:
+              type: string
+              example: "@mipmap/ic_launcher"
+            name:
+              type: string
+              example: "${applicationName}"
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Activity'
+        permissions:
+          type: array
+          items:
+            type: string
+          example: ["android.permission.INTERNET"]
+
+    Activity:
+      type: object
+      description: Android активность
+      properties:
+        name:
+          type: string
+          example: ".MainActivity"
+        exported:
+          type: boolean
+          example: true
+        launchMode:
+          type: string
+          example: "singleTop"
+          enum: [standard, singleTop, singleTask, singleInstance]
+        theme:
+          type: string
+          example: "@style/LaunchTheme"
+
+    MainActivity:
+      type: object
+      description: Главная активность приложения
+      properties:
+        package:
+          type: string
+          example: "com.ourteam.kovrigin.project_program"
+        imports:
+          type: array
+          items:
+            type: string
+          example: ["io.flutter.embedding.android.FlutterActivity"]
+        className:
+          type: string
+          example: "MainActivity"
+        inheritance:
+          type: string
+          example: "FlutterActivity"
+
+    StylesConfig:
+      type: object
+      description: Конфигурация стилей
+      properties:
+        LaunchTheme:
+          type: object
+          description: Тема загрузочного экрана
+        NormalTheme:
+          type: object
+          description: Основная тема приложения
+
+    DrawableConfig:
+      type: object
+      description: Конфигурация drawable ресурса
+      properties:
+        type:
+          type: string
+          example: "layer-list"
+        items:
+          type: array
+          items:
+            type: object
+
+    BuildTypeConfig:
+      type: object
+      description: Конфигурация типа сборки
+      properties:
+        signingConfig:
+          type: string
+          example: "signingConfigs.debug"
+        minifyEnabled:
+          type: boolean
+          example: false
+        debuggable:
+          type: boolean
+          example: true
+
+  parameters:
+    BuildType:
+      name: buildType
+      in: query
+      description: Тип сборки
+      required: false
+      schema:
+        type: string
+        enum: [debug, release, profile]
+        default: "debug"
+      example: "debug"
+
+    SDKVersion:
+      name: sdkVersion
+      in: query
+      description: Версия Android SDK
+      schema:
+        type: string
+        pattern: '^\d+$'
+        example: "34"
+      example: "34"
+
+  securitySchemes:
+    DebugSigning:
+      type: apiKey
+      in: header
+      name: X-Debug-Key
+      description: Debug ключ подписи
+    ReleaseSigning:
+      type: http
+      scheme: bearer
+      description: Release ключ подписи (Keystore)
