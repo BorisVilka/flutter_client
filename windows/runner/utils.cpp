@@ -7,6 +7,14 @@
 
 #include <iostream>
 
+// Utility functions for the Windows Flutter Runner.
+// - CreateAndAttachConsole: Allocates a console window and redirects stdout/stderr
+//   for debugging when running from a terminal or debugger.
+// - GetCommandLineArguments: Parses and converts UTF-16 command-line arguments
+//   (excluding the executable name) to UTF-8 strings for the Flutter engine.
+// - Utf8FromUtf16: Safely converts a null-terminated UTF-16 string to UTF-8.
+
+
 void CreateAndAttachConsole() {
   if (::AllocConsole()) {
     FILE *unused;

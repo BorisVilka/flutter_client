@@ -2,6 +2,10 @@ import FlutterMacOS
 import Cocoa
 import XCTest
 
+// Test suite for the macOS Flutter Runner application.
+// Add platform-specific unit or integration tests here as needed.
+// Refer to Apple’s XCTest documentation for testing best practices.
+
 class RunnerTests: XCTestCase {
 
   func testExample() {

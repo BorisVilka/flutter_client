@@ -5,6 +5,13 @@
 
 #include "resource.h"
 
+// Win32 window implementation for Flutter Runner on Windows.
+// Manages window class registration, DPI-aware creation, and message handling.
+// Supports per-monitor DPI scaling, dark/light theme synchronization via
+// Windows Personalization settings, and child content embedding (e.g., Flutter view).
+// Uses DWM APIs (including DWMWA_USE_IMMERSIVE_DARK_MODE) for modern window styling.
+
+
 namespace {
 
 /// Window attribute that enables dark mode window decorations.

@@ -5,6 +5,13 @@
 #include "flutter_window.h"
 #include "utils.h"
 
+// Entry point for the Windows Flutter Runner application.
+// Initializes the console (if needed), COM, and Dart project,
+// creates and displays the main Flutter window, and runs the
+// standard Win32 message loop. Handles command-line arguments
+// and configures window size, title, and shutdown behavior.
+
+
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
   // Attach to console when present (e.g., 'flutter run') or create a

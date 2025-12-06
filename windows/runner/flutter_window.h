@@ -8,6 +8,12 @@
 
 #include "win32_window.h"
 
+// Declares FlutterWindow, a Win32 window subclass that hosts a Flutter view.
+// This class integrates a flutter::FlutterViewController into a native Windows
+// application, managing its lifecycle and message handling. It is intended
+// solely for displaying Flutter content with minimal native window logic.
+
+
 // A window that does nothing but host a Flutter view.
 class FlutterWindow : public Win32Window {
  public:

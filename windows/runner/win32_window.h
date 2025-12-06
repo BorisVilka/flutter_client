@@ -7,6 +7,13 @@
 #include <memory>
 #include <string>
 
+// High-DPI-aware Win32 window abstraction for Flutter Runner on Windows.
+// Provides basic window creation, message routing, DPI scaling, and theming support.
+// Designed to be subclassed for custom rendering or input handling.
+// Manages child content embedding, window lifecycle, and system theme synchronization.
+
+
+
 // A class abstraction for a high DPI-aware Win32 Window. Intended to be
 // inherited from by classes that wish to specialize with custom
 // rendering and input handling

@@ -4,6 +4,13 @@
 
 #include "flutter/generated_plugin_registrant.h"
 
+// Windows-specific Flutter window implementation.
+// Manages the lifecycle of a Flutter view controller, registers plugins,
+// and integrates Flutter rendering into a Win32 window. Handles essential
+// window messages (e.g., WM_FONTCHANGE) and delegates platform messages
+// to Flutter and its plugins.
+
+
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
     : project_(project) {}
 
