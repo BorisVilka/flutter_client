@@ -1,0 +1,276 @@
+openapi: 3.0.0
+info:
+  title: Flutter Client Windows Native Integration API Documentation
+  description: |
+    Документация описывает нативную интеграцию Flutter-клиента для платформы Windows.
+    Проект использует Win32 API для создания оконного приложения с поддержкой Flutter Engine.
+    Основные файлы отвечают за создание окна, обработку сообщений и запуск Flutter-приложения.
+  version: 1.0.0
+  contact:
+    name: Windows Integration Team
+    email: windows-support@example.com
+
+servers:
+  - url: https://api.example.com/v1
+    description: Основной сервер API
+  - url: http://localhost:8080/v1
+    description: Локальный сервер для разработки
+
+tags:
+  - name: Windows Native Integration
+    description: Файлы нативной интеграции Flutter-приложения для Windows (Win32 API)
+  - name: Window Management
+    description: Управление окнами и обработка сообщений Windows
+  - name: Utilities
+    description: Вспомогательные функции и утилиты
+
+paths:
+  # === Win32Window ===
+  /project/win32_window.h:
+    get:
+      summary: Заголовочный файл Win32Window
+      description: |
+        Заголовочный файл базового класса Win32Window для создания окон Windows с поддержкой высокого DPI.
+        
+        Основные возможности:
+        - Создание и управление окном Windows
+        - Автоматическое масштабирование для высокого DPI
+        - Обработка системных тем (темный/светлый режим)
+        - Управление дочерними окнами (для Flutter-контента)
+        
+        Структура класса:
+        - Point/Size - структуры для позиции и размера окна
+        - Create() - создание окна с учетом масштаба DPI
+        - MessageHandler() - виртуальный метод обработки сообщений Windows
+        - SetChildContent() - установка дочернего окна (Flutter view)
+        - UpdateTheme() - обновление темы окна в соответствии с системными настройками
+      
+      tags:
+        - Windows Native Integration
+        - Window Management
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+  /project/win32_window.cpp:
+    get:
+      summary: Реализация Win32Window
+      description: |
+        Реализация класса Win32Window.
+        
+        Основные функции:
+        - WndProc() - оконная процедура для обработки сообщений Windows
+        - Создание и регистрация класса окна (WindowClassRegistrar)
+        - Автоматическое определение DPI монитора и масштабирование
+        - Обработка сообщений WM_DPICHANGED (изменение DPI)
+        - Поддержка темной темы через DWMWA_USE_IMMERSIVE_DARK_MODE
+        - Управление жизненным циклом окна
+        
+        Особенности реализации:
+        - Использует FlutterDesktopGetDpiForMonitor() для получения DPI
+        - Динамически загружает EnableNonClientDpiScaling для Per-Monitor V1
+        - Читает реестр Windows для определения предпочитаемой темы (AppsUseLightTheme)
+      
+      tags:
+        - Windows Native Integration
+        - Window Management
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+  /project/flutter_window.h:
+    get:
+      summary: Заголовочный файл FlutterWindow
+      description: |
+        Заголовочный файл специализированного класса FlutterWindow, наследующего Win32Window.
+        
+        Класс предназначен для размещения FlutterViewController в окне Windows.
+        
+        Основные компоненты:
+        - FlutterWindow() - конструктор принимающий DartProject
+        - flutter::FlutterViewController - основной контроллер Flutter
+        - Переопределенные методы OnCreate(), OnDestroy(), MessageHandler()
+        - Обработка специальных сообщений Windows (WM_FONTCHANGE)
+      
+      tags:
+        - Windows Native Integration
+        - Window Management
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+  /project/flutter_window.cpp:
+    get:
+      summary: Реализация FlutterWindow
+      description: |
+        Реализация класса FlutterWindow.
+        
+        Ключевые функции:
+        - OnCreate() - инициализация FlutterViewController с правильными размерами
+        - RegisterPlugins() - регистрация сгенерированных Flutter плагинов
+        - MessageHandler() - обработка сообщений с делегированием в Flutter Engine
+        - SetNextFrameCallback() - callback для отображения окна после первой отрисовки Flutter
+        - ForceRedraw() - принудительная перерисовка для гарантии отображения окна
+        
+        Особенности:
+        - Размер FlutterViewController соответствует клиентской области окна
+        - Окно показывается после подготовки первого кадра Flutter
+        - Обработка WM_FONTCHANGE для обновления системных шрифтов в Flutter Engine
+      
+      tags:
+        - Windows Native Integration
+        - Window Management
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+  /project/main.cpp:
+    get:
+      summary: Точка входа приложения (main.cpp)
+      description: |
+        Точка входа Windows приложения (wWinMain).
+        
+        Основной поток выполнения:
+        1. Присоединение или создание консоли для отладки
+        2. Инициализация COM (Component Object Model)
+        3. Создание DartProject с указанием пути к ресурсам ("data")
+        4. Парсинг аргументов командной строки
+        5. Создание и настройка FlutterWindow
+        6. Запуск основного цикла сообщений Windows (message loop)
+        7. Освобождение COM ресурсов
+        
+        Параметры окна по умолчанию:
+        - Позиция: (10, 10)
+        - Размер: 1280x720 пикселей
+        - Заголовок: "project_program"
+      
+      tags:
+        - Windows Native Integration
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+  /project/utils.h:
+    get:
+      summary: Вспомогательные утилиты (заголовок)
+      description: |
+        Заголовочный файл вспомогательных утилит.
+        
+        Функции:
+        - CreateAndAttachConsole() - создание/присоединение консоли для отладки
+        - Utf8FromUtf16() - конвертация UTF-16 (Windows) в UTF-8 (Flutter)
+        - GetCommandLineArguments() - получение аргументов командной строки в UTF-8
+      
+      tags:
+        - Utilities
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+  /project/utils.cpp:
+    get:
+      summary: Вспомогательные утилиты (реализация)
+      description: |
+        Реализация вспомогательных утилит.
+        
+        Подробности реализации:
+        - CreateAndAttachConsole: использует AllocConsole() и перенаправляет stdout/stderr
+        - Utf8FromUtf16: использует WideCharToMultiByte() с CP_UTF8
+        - GetCommandLineArguments: использует CommandLineToArgvW() для парсинга командной строки Windows
+        
+        Особенности:
+        - FlutterDesktopResyncOutputStreams() для синхронизации потоков вывода Flutter
+        - Пропускается первый аргумент (имя исполняемого файла)
+      
+      tags:
+        - Utilities
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+  /project/resource.h:
+    get:
+      summary: Ресурсы приложения (resource.h)
+      description: |
+        Заголовочный файл ресурсов Windows.
+        
+        Содержит:
+        - IDI_APP_ICON (101) - идентификатор иконки приложения
+        - Макросы для Resource Editor (Visual Studio)
+        
+        Используется для:
+        - Иконки приложения в заголовке окна
+        - Иконки в панели задач
+        - Иконки в проводнике Windows
+      
+      tags:
+        - Windows Native Integration
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+components:
+  schemas:
+    WindowSize:
+      type: object
+      properties:
+        width:
+          type: integer
+          example: 1280
+        height:
+          type: integer
+          example: 720
+    
+    WindowPosition:
+      type: object
+      properties:
+        x:
+          type: integer
+          example: 10
+        y:
+          type: integer
+          example: 10
+
+# Сохраняем остальные расширенные поля (x-*) — они не влияют на Swagger UI,
+# но могут использоваться вашими инструментами
+x-project-structure:
+  description: |
+    Flutter-клиент для платформы Windows с нативной интеграцией через Win32 API.
+    Проект использует C++ для создания оконного приложения с встроенным Flutter Engine.
+    
+    Архитектура:
+    1. Win32Window - базовый класс для окон Windows с поддержкой высокого DPI
+    2. FlutterWindow - специализированное окно для размещения FlutterViewController
+    3. Main - точка входа приложения
+    4. Utilities - вспомогательные функции для работы с консолью и аргументами командной строки
+    
+    Ключевые особенности:
+    - Поддержка высокого DPI (Per-Monitor DPI Awareness V1/V2)
+    - Темная/светлая тема системы (Windows 10/11)
+    - Правильная обработка сообщений Windows
+    - UTF-8/UTF-16 конвертация для аргументов командной строки
+  # ... остальное содержимое x-project-structure можно оставить без изменений
+
+x-build-instructions:
+  Windows:
+    - "Требования: Flutter SDK, Visual Studio 2019 или новее с поддержкой C++"
+    - "Установите рабочие нагрузки: 'Desktop development with C++' и 'Universal Windows Platform development'"
+    - "Выполните `flutter pub get` для установки зависимостей Dart"
+    - "Для сборки: `flutter build windows`"
+    - "Для запуска: `flutter run -d windows`"
+    - "Для отладки: откройте solution в Visual Studio (windows/runner/*.sln)"
+
+x-dependencies:
+  windows:
+    - "Flutter Engine (flutter_windows.h)"
+    - "Win32 API (windows.h)"
+    - "DWM API (dwmapi.h) для темной темы"
+    - "COM (combaseapi.h) для инициализации COM"
+
+x-notes:
+  windows:
+    - "Поддерживается Windows 10 и новее"
+    - "Требуется минимум Windows 10 версии 1809 для темной темы"
+    - "Per-Monitor DPI Awareness включен по умолчанию"
+    - "Все строки конвертируются в UTF-8 для совместимости с Flutter/Dart"
+    - "Аргументы командной строки передаются в Dart entrypoint"

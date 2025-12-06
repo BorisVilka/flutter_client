@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flutter Client Windows Native Integration API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css">
+    
+    <style>
+        :root {
+            --primary-color: #0078D7;
+            --secondary-color: #00BCF2;
+            --windows-blue: #0067C0;
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .swagger-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-top: 2rem;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .info-panel {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-panel h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.2rem;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .info-card h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .info-card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .quick-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .quick-link {
+            background: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .quick-link:hover {
+            border-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+        
+        .api-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .platform-badges {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .platform-badge {
+            background: var(--windows-blue);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .tech-badge {
+            background: #68217A;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 0.3rem;
+        }
+        
+        .architecture-diagram {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .architecture-diagram h4 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .diagram-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            border-left: 3px solid var(--primary-color);
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+        }
+        
+        .diagram-number {
+            background: var(--primary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #666;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .windows-feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .feature-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            border: 1px solid #e0e0e0;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .api-stats {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .windows-feature-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Flutter Client Windows Native Integration API Documentation</h1>
+        <p>Документация описывает нативную интеграцию Flutter-клиента для платформы Windows с использованием Win32 API</p>
+        <div class="badge">Flutter Windows Native Integration</div>
+        <div class="platform-badges">
+            <span class="platform-badge">Windows Platform</span>
+            <span class="platform-badge">Win32 API</span>
+            <span class="platform-badge">C++ Language</span>
+            <span class="platform-badge">Flutter Engine</span>
+            <span class="platform-badge">High DPI Support</span>
+        </div>
+    </div>
+    
+    <div class="container">
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>Управление окнами Windows</h4>
+                    <p>Создание и управление окнами Windows с поддержкой высокого DPI, обработка сообщений, управление темами.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Интеграция с Flutter Engine</h4>
+                    <p>Размещение FlutterViewController в окне Windows, регистрация плагинов, обработка сообщений Flutter.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Вспомогательные утилиты</h4>
+                    <p>Работа с консолью для отладки, конвертация строк UTF-8/UTF-16, парсинг аргументов командной строки.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Ресурсы Windows</h4>
+                    <p>Иконки приложения, манифесты, конфигурация для Windows Resource Editor.</p>
+                </div>
+            </div>
+            
+            
+            <div class="quick-links">
+                <a href="#swagger-ui" class="quick-link">
+                    Открыть Swagger UI
+                </a>
+            </div>
+        </div>
+        
+        <div class="swagger-container">
+            <div id="swagger-ui"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Flutter Windows Native Integration API Documentation • Version 1.0.0 • OpenAPI 3.0.0</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8; font-size: 0.85rem;">
+            Поддерживается Windows 10 и новее • Требуется Windows 10 версии 1809 для темной темы • Все строки конвертируются в UTF-8
+        </p>
+    </footer>
+
+    <!-- Swagger UI Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js"></script>
+    
+    <script>
+        console.log("Loading Flutter App OpenAPI documentation...");
+        
+        window.onload = function() {
+            const openApiUrl = "../openapi/windows.yaml";
+            
+            console.log("Loading specification from:", openApiUrl);
+            
+            const ui = SwaggerUIBundle({
+                url: openApiUrl,
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                defaultModelsExpandDepth: 2,
+                defaultModelExpandDepth: 2,
+                docExpansion: 'list',
+                validatorUrl: null,
+                
+                onComplete: function() {
+                    console.log("Flutter App documentation loaded successfully");
+                },
+                
+                onFailure: function(error) {
+                    console.error("Error loading documentation:", error);
+                    
+                    document.getElementById('swagger-ui').innerHTML = `
+                        <div style="padding: 40px; text-align: center; color: #333;">
+                            <h3 style="color: #d32f2f; margin-bottom: 20px;">Error Loading Documentation</h3>
+                            <p style="margin-bottom: 20px; line-height: 1.6;">
+                                Could not load OpenAPI specification for Flutter application.
+                            </p>
+                            <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; max-width: 600px; margin: 0 auto; text-align: left;">
+                                <h4 style="margin-top: 0;">Possible Solutions:</h4>
+                                <ul style="margin-bottom: 0;">
+                                    <li>Ensure file <code>docs/openapi/lib.yaml</code> exists</li>
+                                    <li>Start local server: <code>python3 -m http.server 8000</code></li>
+                                    <li>Open <a href="http://localhost:8000/docs/swagger-ui/flutter-app.html" style="color: #02569B;">http://localhost:8000/docs/swagger-ui/flutter-app.html</a></li>
+                                    <li>Check browser console (F12) for error details</li>
+                                </ul>
+                            </div>
+                            <div style="margin-top: 30px;">
+                                <button onclick="window.location.reload()" style="
+                                    background: #02569B;
+                                    color: white;
+                                    border: none;
+                                    padding: 10px 20px;
+                                    border-radius: 6px;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                    margin: 0 10px;
+                                ">Refresh Page</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            window.ui = ui;
+        };
+        
+        fetch("../openapi/windows.yaml")
+            .then(response => {
+                console.log("File status:", response.status);
+                return response.text();
+            })
+            .then(text => {
+                console.log("File size:", text.length, "characters");
+                console.log("File is available and valid");
+            })
+            .catch(error => {
+                console.error("File not available:", error);
+                console.log("Start local server: python3 -m http.server 8000");
+            });
+    </script>
+</body>
+</html>

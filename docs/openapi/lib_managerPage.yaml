@@ -1,0 +1,362 @@
+openapi: 3.0.3
+info:
+  title: Project Program API
+  version: 1.0.0
+  description: API для управления пользователями, журналом рабочего времени и отчётами
+servers:
+  - url: https://api.projectprogram.example/v1
+    description: Production server
+
+paths:
+  /users:
+    get:
+      summary: Получить список пользователей с фильтрацией
+      operationId: getUsers
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: first_name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: last_name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: middle_name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: depart_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: role
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [user, manager]
+        - name: company_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: schedule_id
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Список пользователей
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /users/{id}:
+    delete:
+      summary: Удалить пользователя по ID
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешное удаление
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Пользователь не найден
+
+  /users/edit:
+    post:
+      summary: Изменить информацию о пользователе
+      operationId: editUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                last_name:
+                  type: string
+                  nullable: true
+                middle_name:
+                  type: string
+                  nullable: true
+                first_name:
+                  type: string
+                  nullable: true
+                department_id:
+                  type: integer
+                  nullable: true
+                role:
+                  type: string
+                  nullable: true
+                company_id:
+                  type: integer
+                  nullable: true
+                schedule_id:
+                  type: integer
+                  nullable: true
+              required:
+                - id
+      responses:
+        '200':
+          description: Пользователь обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Некорректные данные
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /journal-items/by-user:
+    get:
+      summary: Получить записи журнала по пользователю и дате
+      operationId: getJournalItemsByUser
+      parameters:
+        - name: user_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        # остальные фильтры, аналогично getUsers
+      responses:
+        '200':
+          description: Список записей журнала
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalItemListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /journal-items:
+    get:
+      summary: Получить все записи журнала с фильтрацией по отделу и компании
+      operationId: getJournalItems
+      parameters:
+        - name: depart_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: company_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        # другие параметры фильтрации
+      responses:
+        '200':
+          description: Список всех записей
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalItemListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      summary: Добавить новую запись в журнал
+      operationId: addJournalItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalItem'
+      responses:
+        '200':
+          description: Запись успешно добавлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Ошибка валидации данных
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /schedules:
+    get:
+      summary: Получить список графиков работы
+      operationId: geSchedules
+      responses:
+        '200':
+          description: Список графиков
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        last_name:
+          type: string
+        first_name:
+          type: string
+        patronymic:
+          type: string
+        role:
+          type: string
+        depart_id:
+          type: integer
+        company_id:
+          type: integer
+        schedule_id:
+          type: integer
+
+    JournalItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        start:
+          $ref: '#/components/schemas/TimeOfDay'
+        end:
+          $ref: '#/components/schemas/TimeOfDay'
+        pause:
+          $ref: '#/components/schemas/TimeOfDay'
+        status:
+          type: string
+          enum: [working, break, finished, worked]
+        note:
+          type: string
+        user_inn:
+          type: integer
+        company_id:
+          type: integer
+        schedule_id:
+          type: integer
+        date:
+          type: string
+          format: date
+
+    Schedule:
+      type: object
+      properties:
+        id:
+          type: integer
+        start:
+          $ref: '#/components/schemas/TimeOfDay'
+        end:
+          $ref: '#/components/schemas/TimeOfDay'
+
+    TimeOfDay:
+      type: object
+      properties:
+        hour:
+          type: integer
+          minimum: 0
+          maximum: 23
+        minute:
+          type: integer
+          minimum: 0
+          maximum: 59
+
+    UserListResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+
+    JournalItemListResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/JournalItem'
+
+    ScheduleListResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Schedule'
+
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+
+  responses:
+    Unauthorized:
+      description: Требуется авторизация
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: "Unauthorized"

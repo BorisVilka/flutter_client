@@ -1,6 +1,10 @@
 import Cocoa
 import FlutterMacOS
 
+// Main macOS window hosting the Flutter interface.
+// Initializes a FlutterViewController as the content view and registers
+// generated plugins to enable Flutter–native integration.
+
 class MainFlutterWindow: NSWindow {
   override func awakeFromNib() {
     let flutterViewController = FlutterViewController()

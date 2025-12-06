@@ -1,0 +1,179 @@
+openapi: 3.0.0
+info:
+  title: Flutter Client macOS Integration API Documentation
+  description: |
+    Эта документация описывает структуру и конфигурационные файлы Flutter-клиента для платформы macOS, а также тесты виджетов.
+    Проект является кроссплатформенным клиентом, использующим Flutter Framework, с нативной интеграцией для macOS.
+    Основные файлы отвечают за запуск приложения на macOS и тестирование UI-виджетов.
+  version: 1.0.0
+  contact:
+    name: Development Team
+    email: support@example.com
+
+servers:
+  - url: https://api.example.com/v1
+    description: Основной сервер API (предполагаемый сервер, с которым взаимодействует клиент)
+  - url: http://localhost:8080/v1
+    description: Локальный сервер для разработки
+
+tags:
+  - name: macOS Integration
+    description: Файлы нативной интеграции Flutter-приложения для macOS
+  - name: Testing
+    description: Тесты для Flutter-виджетов и приложения
+
+paths:
+  # === macOS Native Files ===
+  /AppDelegate.swift:
+    get:
+      summary: Главный делегат приложения macOS
+      description: |
+        Главный делегат приложения macOS. Отвечает за жизненный цикл приложения.
+        - Унаследован от `FlutterAppDelegate`.
+        - Переопределяет метод `applicationShouldTerminateAfterLastWindowClosed`, чтобы приложение завершалось при закрытии последнего окна.
+       
+      tags:
+        - macOS Integration
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+  /MainFlutterWindow.swift:
+    get:
+      summary: Главное окно приложения macOS
+      description: |
+        Главное окно приложения macOS.
+        - Создает `FlutterViewController` как контроллер содержимого окна.
+        - Регистрирует сгенерированные Flutter-плагины для нативной интеграции.
+        - Настраивает размер и отображение окна.
+       
+      tags:
+        - macOS Integration
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+  /RunnerTests.swift:
+    get:
+      summary: Unit-тесты нативной части (macOS)
+      description: |
+        Модуль unit-тестов для нативной части приложения macOS.
+        - Содержит пример тестового класса `RunnerTests` с методом `testExample`.
+        - Может быть расширен для тестирования нативного кода или интеграции с Flutter.
+       
+      tags:
+        - Testing
+        - macOS Integration
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+  /widget_test.dart:
+    get:
+      summary: Тест Flutter-виджетов
+      description: |
+        Основной тест Flutter-виджетов.
+        - Содержит smoke-тест для проверки базового функционала приложения (например, счетчика).
+        - Использует `WidgetTester` для симуляции взаимодействия с UI (тапы, скроллы).
+        - Проверяет состояние виджетов и их свойства.
+      
+      tags:
+        - Testing
+      responses:
+        '200':
+          description: Файл существует (фиктивный ответ)
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "John Doe"
+        email:
+          type: string
+          format: email
+          example: "john@example.com"
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+# === Сохраняем расширенные метаданные (x-*) ===
+x-project-structure:
+  description: |
+    Flutter-клиент для платформы macOS с нативной интеграцией через Swift.
+    Проект включает файлы для запуска на macOS и тестирования виджетов.
+  files:
+    - path: /macos/Runner/AppDelegate.swift
+      description: |
+        Главный делегат приложения macOS. Отвечает за жизненный цикл приложения.
+        - Унаследован от `FlutterAppDelegate`.
+        - Переопределяет метод `applicationShouldTerminateAfterLastWindowClosed`, чтобы приложение завершалось при закрытии последнего окна.
+      language: Swift
+      purpose: macOS App Lifecycle
+      tags:
+        - macOS Integration
+
+    - path: /macos/Runner/MainFlutterWindow.swift
+      description: |
+        Главное окно приложения macOS.
+        - Создает `FlutterViewController` как контроллер содержимого окна.
+        - Регистрирует сгенерированные Flutter-плагины для нативной интеграции.
+        - Настраивает размер и отображение окна.
+      language: Swift
+      purpose: macOS Window Management
+      tags:
+        - macOS Integration
+
+    - path: /macos/RunnerTests/RunnerTests.swift
+      description: |
+        Модуль unit-тестов для нативной части приложения macOS.
+        - Содержит пример тестового класса `RunnerTests` с методом `testExample`.
+        - Может быть расширен для тестирования нативного кода или интеграции с Flutter.
+      language: Swift
+      purpose: Unit Testing (macOS)
+      tags:
+        - Testing
+        - macOS Integration
+
+    - path: /test/widget_test.dart
+      description: |
+        Основной тест Flutter-виджетов.
+        - Содержит smoke-тест для проверки базового функционала приложения (например, счетчика).
+        - Использует `WidgetTester` для симуляции взаимодействия с UI (тапы, скроллы).
+        - Проверяет состояние виджетов и их свойства.
+      language: Dart
+      purpose: Flutter Widget Testing
+      tags:
+        - Testing
+
+x-flutter-config:
+  sdk: ">=3.0.0 <4.0.0"
+  platform: "macos"
+  dependencies:
+    - flutter:
+        sdk: flutter
+  dev_dependencies:
+    - flutter_test:
+        sdk: flutter
+    - integration_test:
+        sdk: flutter
+
+x-build-instructions:
+  macOS:
+    - "Убедитесь, что установлен Flutter SDK и Xcode."
+    - "Выполните `flutter pub get` для установки зависимостей."
+    - "Для запуска на macOS: `flutter run -d macos`."
+    - "Для тестов: `flutter test` (виджеты) или запуск через Xcode (нативные тесты)."
