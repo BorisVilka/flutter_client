@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Configuration - OpenAPI Docs</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui.css">
+    
+    <style>
+        :root {
+            --primary-color: #02569B;
+            --secondary-color: #3DDC84;
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .swagger-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-top: 2rem;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .info-panel {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-panel h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.2rem;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .info-card h4 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .info-card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .quick-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .quick-link {
+            background: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            border: 2px solid #e0e0e0;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .quick-link:hover {
+            border-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #666;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .spec-item {
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .spec-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+        
+        .spec-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .specs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Linux Desktop Configuration</h1>
+        <p>OpenAPI documentation for Linux desktop build configuration of Project Program application</p>
+        <div class="badge">Linux Desktop • CMake • GTK+3 • Flutter</div>
+    </div>
+    
+    <div class="container">
+        <div class="info-panel">
+            <h3>Build Configuration Overview</h3>
+            <p>Complete documentation of Linux desktop build configuration using CMake, GTK+3, and Flutter engine integration.</p>
+            
+            <div class="specs-grid">
+                <div class="spec-item">
+                    <div class="spec-value">CMake 3.10+</div>
+                    <div class="spec-label">Build System</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-value">GTK+3</div>
+                    <div class="spec-label">GUI Toolkit</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-value">1280x720</div>
+                    <div class="spec-label">Default Window</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-value">C++14</div>
+                    <div class="spec-label">Language Standard</div>
+                </div>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>CMake Build System</h4>
+                    <p>Configuration files for building Linux desktop application using CMake. Defines targets, dependencies, and build settings.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>GTK+3 Application</h4>
+                    <p>Native Linux desktop application using GTK+3 toolkit. Supports X11 and Wayland with adaptive UI for GNOME and other window managers.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Flutter Engine Integration</h4>
+                    <p>Integration with Flutter engine for Linux. Includes Flutter library bindings, plugin registration, and render surface management.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>C++ Source Code</h4>
+                    <p>Native C++ source code for application entry point, GTK application class, and Flutter view integration.</p>
+                </div>
+            </div>
+            
+            <div class="quick-links">
+                <a href="#swagger-ui" class="quick-link">
+                    Open Swagger UI
+                </a>
+                <a href="../openapi/linux.yaml" download class="quick-link">
+                    Download OpenAPI Spec
+                </a>
+                <a href="android.html" class="quick-link">
+                    Android Documentation
+                </a>
+                <a href="ios.html" class="quick-link">
+                    iOS Documentation
+                </a>
+                <a href="flutter-app.html" class="quick-link">
+                    Flutter App Documentation
+                </a>
+            </div>
+        </div>
+        
+        <div class="swagger-container">
+            <div id="swagger-ui"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Linux Desktop Configuration Documentation • Version 1.0.0 • OpenAPI 3.0</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8; font-size: 0.85rem;">
+            Build System: CMake • GUI: GTK+3 • Window Managers: GNOME, X11, Wayland
+        </p>
+    </footer>
+
+    <!-- Swagger UI Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-bundle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js"></script>
+    
+    <script>
+        console.log("Loading Linux Configuration OpenAPI documentation...");
+        
+        window.onload = function() {
+            const openApiUrl = "../openapi/linux.yaml";
+            
+            console.log("Loading specification from:", openApiUrl);
+            
+            const ui = SwaggerUIBundle({
+                url: openApiUrl,
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                defaultModelsExpandDepth: 2,
+                defaultModelExpandDepth: 2,
+                docExpansion: 'list',
+                validatorUrl: null,
+                
+                onComplete: function() {
+                    console.log("Linux Configuration documentation loaded successfully");
+                },
+                
+                onFailure: function(error) {
+                    console.error("Error loading documentation:", error);
+                    
+                    document.getElementById('swagger-ui').innerHTML = `
+                        <div style="padding: 40px; text-align: center; color: #333;">
+                            <h3 style="color: #d32f2f; margin-bottom: 20px;">Error Loading Documentation</h3>
+                            <p style="margin-bottom: 20px; line-height: 1.6;">
+                                Could not load OpenAPI specification for Linux configuration.
+                            </p>
+                            <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; max-width: 600px; margin: 0 auto; text-align: left;">
+                                <h4 style="margin-top: 0;">Possible Solutions:</h4>
+                                <ul style="margin-bottom: 0;">
+                                    <li>Ensure file <code>docs/openapi/linux.yaml</code> exists</li>
+                                    <li>Start local server: <code>python3 -m http.server 8000</code></li>
+                                    <li>Open <a href="http://localhost:8000/docs/swagger-ui/linux.html" style="color: #02569B;">http://localhost:8000/docs/swagger-ui/linux.html</a></li>
+                                    <li>Check browser console (F12) for error details</li>
+                                </ul>
+                            </div>
+                            <div style="margin-top: 30px;">
+                                <button onclick="window.location.reload()" style="
+                                    background: #02569B;
+                                    color: white;
+                                    border: none;
+                                    padding: 10px 20px;
+                                    border-radius: 6px;
+                                    font-size: 14px;
+                                    cursor: pointer;
+                                    margin: 0 10px;
+                                ">Refresh Page</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            window.ui = ui;
+        };
+        
+        fetch("../openapi/linux.yaml")
+            .then(response => {
+                console.log("File status:", response.status);
+                return response.text();
+            })
+            .then(text => {
+                console.log("File size:", text.length, "characters");
+                console.log("File is available and valid");
+            })
+            .catch(error => {
+                console.error("File not available:", error);
+                console.log("Start local server: python3 -m http.server 8000");
+            });
+    </script>
+</body>
+</html>

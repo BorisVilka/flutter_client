@@ -1,0 +1,405 @@
+openapi: 3.0.0
+info:
+  title: Linux Desktop Configuration
+  description: |
+    OpenAPI документация Linux-части Flutter проекта.
+    Описывает конфигурацию сборки для Linux Desktop приложения.
+    
+    ## Особенности Linux сборки:
+    - Использует CMake как систему сборки
+    - GTK+3 для графического интерфейса
+    - GLib для работы с событиями и памятью
+    - Поддержка X11 и Wayland
+    
+    ## Архитектура:
+    - Главный исполняемый файл: project_program
+    - Идентификатор приложения: com.ourteam.kovrigin.project_program
+    - Разрешение окна по умолчанию: 1280x720
+  version: 1.0.0
+  contact:
+    name: Development Team
+    email: dev@example.com
+
+servers:
+  - url: file:///linux
+    description: Локальная директория Linux конфигурации
+  - url: cmake://build
+    description: CMake система сборки
+
+tags:
+  - name: CMake
+    description: Файлы конфигурации сборки CMake
+  - name: C++ Source
+    description: Исходный код на C++
+  - name: GTK Application
+    description: Конфигурация GTK приложения
+  - name: Flutter Integration
+    description: Интеграция с Flutter Engine
+
+paths:
+  /CMakeLists.txt:
+    get:
+      tags: [CMake]
+      summary: Основная конфигурация CMake
+      description: |
+        Главный файл сборки проекта для Linux.
+        Определяет цели сборки, зависимости и настройки.
+      responses:
+        '200':
+          description: Успешное получение конфигурации CMake
+          content:
+            text/cmake:
+              schema:
+                $ref: '#/components/schemas/CMakeConfig'
+
+  /main.cc:
+    get:
+      tags: [C++ Source]
+      summary: Точка входа приложения
+      description: |
+        Главная функция приложения. Создает экземпляр MyApplication
+        и запускает основной цикл событий GTK.
+      responses:
+        '200':
+          description: Успешное получение main.cc
+          content:
+            text/cpp:
+              schema:
+                $ref: '#/components/schemas/MainSource'
+
+  /my_application.cc:
+    get:
+      tags: [C++ Source]
+      summary: Реализация GTK приложения
+      description: |
+        Основная реализация GTK приложения с интеграцией Flutter.
+        Управляет жизненным циклом приложения и окном.
+      responses:
+        '200':
+          description: Успешное получение my_application.cc
+          content:
+            text/cpp:
+              schema:
+                $ref: '#/components/schemas/ApplicationSource'
+
+  /my_application.h:
+    get:
+      tags: [C++ Source]
+      summary: Заголовочный файл приложения
+      description: Заголовочный файл с объявлением класса MyApplication
+      responses:
+        '200':
+          description: Успешное получение my_application.h
+          content:
+            text/cpp:
+              schema:
+                $ref: '#/components/schemas/ApplicationHeader'
+
+  /flutter/CMakeLists.txt:
+    get:
+      tags: [CMake, Flutter Integration]
+      summary: Конфигурация Flutter для Linux
+      description: |
+        Конфигурация сборки Flutter Engine для Linux.
+        Определяет зависимости и настройки Flutter.
+      responses:
+        '200':
+          description: Успешное получение конфигурации Flutter
+          content:
+            text/cmake:
+              schema:
+                $ref: '#/components/schemas/FlutterCMakeConfig'
+
+  /runner/CMakeLists.txt:
+    get:
+      tags: [CMake]
+      summary: Конфигурация runner
+      description: Конфигурация сборки исполняемого файла
+      responses:
+        '200':
+          description: Успешное получение конфигурации runner
+
+  /runner/main.cc:
+    get:
+      tags: [C++ Source]
+      summary: Точка входа runner
+      description: Альтернативная точка входа приложения
+      responses:
+        '200':
+          description: Успешное получение runner/main.cc
+
+  /runner/my_application.cc:
+    get:
+      tags: [C++ Source]
+      summary: Реализация runner
+      description: Альтернативная реализация приложения
+      responses:
+        '200':
+          description: Успешное получение runner/my_application.cc
+
+  /runner/my_application.h:
+    get:
+      tags: [C++ Source]
+      summary: Заголовочный файл runner
+      description: Заголовочный файл runner
+      responses:
+        '200':
+          description: Успешное получение runner/my_application.h
+
+components:
+  schemas:
+    CMakeConfig:
+      type: object
+      description: Конфигурация CMake
+      properties:
+        cmake_minimum_version:
+          type: string
+          example: "3.10"
+          description: Минимальная версия CMake
+        project_name:
+          type: string
+          example: "runner"
+          description: Имя проекта
+        binary_name:
+          type: string
+          example: "project_program"
+          description: Имя исполняемого файла
+        application_id:
+          type: string
+          example: "com.ourteam.kovrigin.project_program"
+          description: Идентификатор приложения
+        build_types:
+          type: array
+          items:
+            type: string
+          example: ["Debug", "Profile", "Release"]
+          description: Доступные типы сборки
+        dependencies:
+          type: object
+          properties:
+            pkg_config:
+              type: boolean
+              example: true
+            gtk:
+              type: boolean
+              example: true
+            flutter:
+              type: boolean
+              example: true
+
+    MainSource:
+      type: object
+      description: Исходный код main.cc
+      properties:
+        function:
+          type: string
+          example: "main"
+          description: Главная функция
+        parameters:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "argc"
+              type:
+                type: string
+                example: "int"
+        return_type:
+          type: string
+          example: "int"
+        creates_application:
+          type: boolean
+          example: true
+        runs_application:
+          type: boolean
+          example: true
+
+    ApplicationSource:
+      type: object
+      description: Исходный код приложения
+      properties:
+        class_name:
+          type: string
+          example: "MyApplication"
+          description: Имя класса приложения
+        parent_class:
+          type: string
+          example: "GtkApplication"
+          description: Родительский класс
+        methods:
+          type: array
+          items:
+            $ref: '#/components/schemas/GTKMethod'
+        window_config:
+          type: object
+          properties:
+            default_width:
+              type: integer
+              example: 1280
+            default_height:
+              type: integer
+              example: 720
+            title:
+              type: string
+              example: "project_program"
+            use_header_bar:
+              type: boolean
+              example: true
+
+    ApplicationHeader:
+      type: object
+      description: Заголовочный файл приложения
+      properties:
+        guard:
+          type: string
+          example: "FLUTTER_MY_APPLICATION_H_"
+          description: Защита от повторного включения
+        includes:
+          type: array
+          items:
+            type: string
+          example: ["gtk/gtk.h"]
+        class_declaration:
+          type: string
+          example: "MyApplication"
+        factory_method:
+          type: string
+          example: "my_application_new"
+        return_type:
+          type: string
+          example: "MyApplication*"
+
+    GTKMethod:
+      type: object
+      description: Метод GTK приложения
+      properties:
+        name:
+          type: string
+          example: "my_application_activate"
+        type:
+          type: string
+          enum: [activate, startup, shutdown, local_command_line, dispose]
+        description:
+          type: string
+          example: "Обработчик активации приложения"
+
+    FlutterCMakeConfig:
+      type: object
+      description: Конфигурация Flutter для CMake
+      properties:
+        flutter_library:
+          type: string
+          example: "libflutter_linux_gtk.so"
+          description: Библиотека Flutter для Linux
+        icu_data_file:
+          type: string
+          example: "icudtl.dat"
+          description: Файл данных ICU
+        dependencies:
+          type: object
+          properties:
+            gtk:
+              type: boolean
+              example: true
+            glib:
+              type: boolean
+              example: true
+            gio:
+              type: boolean
+              example: true
+        headers:
+          type: array
+          items:
+            type: string
+          example: ["fl_view.h", "flutter_linux.h"]
+
+    BuildConfiguration:
+      type: object
+      description: Конфигурация сборки
+      properties:
+        compiler:
+          type: string
+          example: "g++"
+        standard:
+          type: string
+          example: "c++14"
+        warnings:
+          type: boolean
+          example: true
+        optimization:
+          type: object
+          properties:
+            debug:
+              type: string
+              example: "-O0"
+            release:
+              type: string
+              example: "-O3"
+
+    WindowManager:
+      type: object
+      description: Конфигурация оконного менеджера
+      properties:
+        supported:
+          type: array
+          items:
+            type: string
+          example: ["GNOME Shell", "X11", "Wayland"]
+        header_bar_usage:
+          type: object
+          properties:
+            gnome:
+              type: boolean
+              example: true
+            other_x11:
+              type: boolean
+              example: false
+            wayland:
+              type: boolean
+              example: true
+
+  parameters:
+    BuildType:
+      name: build_type
+      in: query
+      description: Тип сборки
+      required: false
+      schema:
+        type: string
+        enum: [Debug, Profile, Release]
+        default: "Debug"
+      example: "Debug"
+
+    WindowManagerType:
+      name: wm
+      in: query
+      description: Тип оконного менеджера
+      required: false
+      schema:
+        type: string
+        enum: [gnome, x11, wayland]
+      example: "gnome"
+
+    Architecture:
+      name: arch
+      in: query
+      description: Архитектура процессора
+      required: false
+      schema:
+        type: string
+        enum: [x86_64, arm64]
+        default: "x86_64"
+      example: "x86_64"
+
+  securitySchemes:
+    CMakeAuth:
+      type: apiKey
+      in: header
+      name: X-CMake-Version
+      description: Версия CMake
+    GTKConfig:
+      type: http
+      scheme: basic
+      description: Конфигурация GTK
