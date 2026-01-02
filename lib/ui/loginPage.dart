@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/system.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:project_program/network/api_service.dart';
@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_program/ui/adminPage.dart';
 import 'package:project_program/ui/employeePage.dart';
 import 'package:project_program/ui/managerPage.dart';
+import 'package:provider/provider.dart';
+import 'package:project_program/theme/theme_manager.dart';
 
 import '../network/constants.dart';
 
@@ -121,14 +123,14 @@ class _LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
             margin: const EdgeInsets.all(20),
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardTheme.color ?? Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
@@ -274,6 +276,24 @@ class _LoginState extends State<LoginPage> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
+                ),
+                const SizedBox(height: 16),
+                // Кнопка переключения темы
+                Consumer<ThemeManager>(
+                  builder: (context, themeManager, child) {
+                    return IconButton(
+                      onPressed: () => themeManager.toggleTheme(),
+                      icon: Icon(
+                        themeManager.isDarkMode 
+                            ? Icons.light_mode 
+                            : Icons.dark_mode,
+                        color: Colors.grey,
+                      ),
+                      tooltip: themeManager.isDarkMode 
+                          ? 'Светлая тема' 
+                          : 'Темная тема',
+                    );
+                  },
                 ),
               ],
             ),

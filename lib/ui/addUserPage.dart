@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/system.dart';
 import 'package:project_program/network/api_service.dart';
 import 'package:project_program/entity/data/user.dart';
 import 'package:project_program/entity/data/company.dart';
 import 'package:project_program/entity/data/schedule.dart';
 import 'package:project_program/entity/data_list.dart';
+import 'package:provider/provider.dart';
+import 'package:project_program/theme/theme_manager.dart';
 
 class AddUserPage extends StatefulWidget {
   const AddUserPage({super.key});
@@ -192,12 +194,30 @@ class _AddUserPageState extends State<AddUserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
           'Добавление пользователя',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        actions: [
+          // Кнопка переключения темы
+          Consumer<ThemeManager>(
+            builder: (context, themeManager, child) {
+              return IconButton(
+                onPressed: () => themeManager.toggleTheme(),
+                icon: Icon(
+                  themeManager.isDarkMode 
+                      ? Icons.light_mode 
+                      : Icons.dark_mode,
+                ),
+                tooltip: themeManager.isDarkMode 
+                    ? 'Светлая тема' 
+                    : 'Темная тема',
+              );
+            },
+          ),
+        ],
       ),
       body: _isLoadingData
           ? const Center(child: CircularProgressIndicator())
@@ -208,7 +228,7 @@ class _AddUserPageState extends State<AddUserPage> {
                   padding: const EdgeInsets.all(24),
                   constraints: const BoxConstraints(maxWidth: 500),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardTheme.color ?? Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
@@ -417,4 +437,3 @@ class _AddUserPageState extends State<AddUserPage> {
     );
   }
 }
-

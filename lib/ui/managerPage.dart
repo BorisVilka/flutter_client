@@ -9,6 +9,8 @@ import 'package:project_program/entity/data/report_Item.dart';
 import 'package:project_program/entity/data_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_program/network/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:project_program/theme/theme_manager.dart';
 
 class ManagerPage extends StatefulWidget {
   final int userId;
@@ -418,7 +420,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Column(
@@ -428,7 +430,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
                 // Вкладки
                 TabBar(
                   controller: _tabController,
-                  labelColor: Colors.black87,
+                  labelColor: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black87,
                   unselectedLabelColor: Colors.grey,
                   indicatorColor: Colors.blue,
                   tabs: const [
@@ -456,7 +458,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.all(16),
-      color: Colors.white,
+      color: Theme.of(context).appBarTheme.backgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -482,6 +484,22 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
           ),
           Row(
             children: [
+              // Кнопка переключения темы
+              Consumer<ThemeManager>(
+                builder: (context, themeManager, child) {
+                  return IconButton(
+                    onPressed: () => themeManager.toggleTheme(),
+                    icon: Icon(
+                      themeManager.isDarkMode 
+                          ? Icons.light_mode 
+                          : Icons.dark_mode,
+                    ),
+                    tooltip: themeManager.isDarkMode 
+                        ? 'Светлая тема' 
+                        : 'Темная тема',
+                  );
+                },
+              ),
               IconButton(
                 icon: const Icon(Icons.refresh),
                 onPressed: _loadData,
@@ -635,7 +653,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
           
           return TableRow(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardTheme.color ?? Theme.of(context).cardColor,
               borderRadius: isLast
                   ? const BorderRadius.only(
                       bottomLeft: Radius.circular(8),
@@ -1407,67 +1425,65 @@ class _EditEmployeeDialogState extends State<_EditEmployeeDialog> {
                         }
                         final id = int.tryParse(value.trim());
                         if (id == null) {
-                          return 'Введите корректный ID отдела.';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    // Кнопки
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
-                          style: TextButton.styleFrom(
-                            side: BorderSide(color: Colors.grey[300]!),
-                          ),
-                          child: const Text(
-                            'Отмена',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        ElevatedButton(
-                          onPressed: _isLoading ? null : _saveChanges,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1E3A8A),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 14,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: _isLoading
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                  ),
-                                )
-                              : const Text(
-                                  'Сохранить',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+          return 'Введите корректный ID отдела.';
+        }
+        return null;
+      },
+    ),
+    const SizedBox(height: 24),
+    // Кнопки
+    Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: _isLoading ? null : () => Navigator.of(context).pop(),
+          style: TextButton.styleFrom(
+            side: BorderSide(color: Colors.grey[300]!),
+          ),
+          child: const Text(
+            'Отмена',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
             ),
-    );
-  }
+          ),
+        ),
+        const SizedBox(width: 12),
+        ElevatedButton(
+          onPressed: _isLoading ? null : _saveChanges,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF1E3A8A),
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 14,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: _isLoading
+              ? const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : const Text(
+                  'Сохранить',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+        ),
+      ],
+    ),
+  ],
+),
+),
+);
 }
-
+}

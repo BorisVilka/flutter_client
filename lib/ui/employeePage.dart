@@ -8,6 +8,8 @@ import 'package:project_program/entity/data/journal_item.dart';
 import 'package:project_program/entity/data_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_program/network/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:project_program/theme/theme_manager.dart';
 
 class EmployeePage extends StatefulWidget {
   final int userId;
@@ -273,7 +275,7 @@ class _EmployeePageState extends State<EmployeePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
@@ -327,6 +329,22 @@ class _EmployeePageState extends State<EmployeePage> {
         ),
         Row(
           children: [
+            // Кнопка переключения темы
+            Consumer<ThemeManager>(
+              builder: (context, themeManager, child) {
+                return IconButton(
+                  onPressed: () => themeManager.toggleTheme(),
+                  icon: Icon(
+                    themeManager.isDarkMode 
+                        ? Icons.light_mode 
+                        : Icons.dark_mode,
+                  ),
+                  tooltip: themeManager.isDarkMode 
+                      ? 'Светлая тема' 
+                      : 'Темная тема',
+                );
+              },
+            ),
             IconButton(
               icon: const Icon(Icons.refresh),
               onPressed: _loadData,
@@ -563,4 +581,3 @@ class _EmployeePageState extends State<EmployeePage> {
     );
   }
 }
-

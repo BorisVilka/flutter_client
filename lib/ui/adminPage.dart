@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/system.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:project_program/network/api_service.dart';
@@ -10,6 +10,8 @@ import 'package:project_program/entity/data/report_Item.dart';
 import 'package:project_program/entity/data_list.dart';
 import 'package:project_program/ui/addUserPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:project_program/theme/theme_manager.dart';
 
 import '../network/constants.dart';
 
@@ -158,13 +160,29 @@ class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text(
           'Панель администратора',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         actions: [
+          // Кнопка переключения темы
+          Consumer<ThemeManager>(
+            builder: (context, themeManager, child) {
+              return IconButton(
+                onPressed: () => themeManager.toggleTheme(),
+                icon: Icon(
+                  themeManager.isDarkMode 
+                      ? Icons.light_mode 
+                      : Icons.dark_mode,
+                ),
+                tooltip: themeManager.isDarkMode 
+                    ? 'Светлая тема' 
+                    : 'Темная тема',
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
@@ -337,7 +355,7 @@ class _AdminPageState extends State<AdminPage> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+        color: Theme.of(context).cardTheme.color ?? Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey[300]!),
       ),
@@ -1331,4 +1349,3 @@ class _EditUserDialogState extends State<_EditUserDialog> {
     );
   }
 }
-
