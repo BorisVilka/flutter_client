@@ -136,6 +136,20 @@ class _EmployeePageState extends State<EmployeePage> {
       );
     }
   }
+  int _toMinutes(TimeOfDay t) => t.hour * 60 + t.minute;
+  TimeOfDay pauseTimeOfDay(TimeOfDay? breakStart, TimeOfDay? breakEnd) {
+    final start = _toMinutes(breakStart ?? const TimeOfDay(hour: 0, minute: 0));
+    final end   = _toMinutes(breakEnd   ?? const TimeOfDay(hour: 0, minute: 0));
+
+    final diff = end - start;
+    if (diff <= 0) {
+      return const TimeOfDay(hour: 0, minute: 0);
+    }
+    final h = diff ~/ 60;
+    final m = diff % 60;
+    return TimeOfDay(hour: h, minute: m);
+  }
+
 
   Future<void> _endWork() async {
     // 4) При нажатии на кнопку закончить работу - создавай объект JournalItem и отправляй запрос addJournalItem
@@ -156,7 +170,7 @@ class _EmployeePageState extends State<EmployeePage> {
       final journalItem = JournalItem(
         id: random.nextInt(2000000000),
         start: _workStart!,
-        pause: _breakStart ?? const TimeOfDay(hour: 0, minute: 0),
+        pause: pauseTimeOfDay(_breakStart, _breakEnd) ,
         end: _workEnd!,
         status: 'worked',
         note: '',

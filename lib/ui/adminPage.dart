@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/system.dart';
+//import 'package:flutter/system.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:project_program/network/api_service.dart';
@@ -816,15 +817,11 @@ class _AdminPageState extends State<AdminPage> {
               ),
               Padding(
                 padding: EdgeInsets.all(8),
-                child: Text('Начало (план)', style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8),
                 child: Text('Начало (факт)', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: EdgeInsets.all(8),
-                child: Text('Конец (план)', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: Text('Начало (план)', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: EdgeInsets.all(8),
@@ -832,7 +829,7 @@ class _AdminPageState extends State<AdminPage> {
               ),
               Padding(
                 padding: EdgeInsets.all(8),
-                child: Text('Перерыв (план)', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: Text('Конец (план)', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: EdgeInsets.all(8),
@@ -840,11 +837,15 @@ class _AdminPageState extends State<AdminPage> {
               ),
               Padding(
                 padding: EdgeInsets.all(8),
-                child: Text('Часы (план)', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: Text('Перерыв (план)', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: EdgeInsets.all(8),
                 child: Text('Часы (факт)', style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: Text('Часы (план)', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: EdgeInsets.all(8),
@@ -886,19 +887,19 @@ class _AdminPageState extends State<AdminPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Text(_formatTime(item.pause_schedule)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
                   child: Text(_formatTime(item.pause)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Text(_formatDuration(Duration(minutes: item.required))),
+                  child: Text(_formatTime(item.pause_schedule)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(_formatDuration(Duration(minutes: item.actual))),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(_formatDuration(Duration(minutes: item.required))),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),

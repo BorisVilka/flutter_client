@@ -104,7 +104,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
           _breakStart = _todayJournal!.pause;
           _breakEnd = _todayJournal!.pause;
           _workDate = _todayJournal!.date;
-          
+
           // Определяем текущий статус
           if (_todayJournal!.status == 'working') {
             _currentStatus = 'В работе';
@@ -143,7 +143,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
       _breakEnd = null;
       _currentStatus = 'В работе';
     });
-    
+
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -184,7 +184,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
       );
 
       final response = await ApiService.addJournalItem(journalItem);
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -192,7 +192,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
             backgroundColor: response.code == 200 ? Colors.green : Colors.red,
           ),
         );
-        
+
         if (response.code == 200) {
           // Сбрасываем локальные данные после успешной отправки
           setState(() {
@@ -229,7 +229,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
       _breakEnd = null;
       _currentStatus = 'На перерыве';
     });
-    
+
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -253,7 +253,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
       _breakEnd = TimeOfDay.now();
       _currentStatus = 'В работе';
     });
-    
+
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -266,7 +266,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
 
   Future<void> _loadDepartmentEmployees() async {
     if (_user == null) return;
-    
+
     setState(() {
       _isLoadingEmployees = true;
     });
@@ -284,7 +284,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
         null, // company_id
         null, // schedule_id
       );
-      
+
       setState(() {
         // Фильтруем, чтобы исключить самого начальника
         _departmentEmployees = employeesList.data.where((u) => u.id != _user!.id).toList();
@@ -325,7 +325,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
     if (confirmed == true) {
       try {
         final response = await ApiService.deleteUser(user.id.toString());
-        
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -333,7 +333,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
               backgroundColor: response.code == 200 ? Colors.green : Colors.red,
             ),
           );
-          
+
           if (response.code == 200) {
             await _loadDepartmentEmployees();
           }
@@ -490,12 +490,12 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
                   return IconButton(
                     onPressed: () => themeManager.toggleTheme(),
                     icon: Icon(
-                      themeManager.isDarkMode 
-                          ? Icons.light_mode 
+                      themeManager.isDarkMode
+                          ? Icons.light_mode
                           : Icons.dark_mode,
                     ),
-                    tooltip: themeManager.isDarkMode 
-                        ? 'Светлая тема' 
+                    tooltip: themeManager.isDarkMode
+                        ? 'Светлая тема'
                         : 'Темная тема',
                   );
                 },
@@ -650,7 +650,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
           final employee = entry.value;
           final fullName = '${employee.last_name} ${employee.first_name} ${employee.patronymic}';
           final isLast = index == _departmentEmployees.length - 1;
-          
+
           return TableRow(
             decoration: BoxDecoration(
               color: Theme.of(context).cardTheme.color ?? Theme.of(context).cardColor,
@@ -770,7 +770,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
 
   Future<void> _loadReports() async {
     if (_user == null) return;
-    
+
     setState(() {
       _isLoadingReports = true;
     });
@@ -827,16 +827,16 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
 
   Duration _calculateFactBreakDuration(TimeOfDay? breakStart, TimeOfDay? breakEnd) {
     // Вычисляем фактическую длительность перерыва
-    if (breakStart == null || breakEnd == null || 
+    if (breakStart == null || breakEnd == null ||
         (breakStart.hour == 0 && breakStart.minute == 0) ||
         (breakEnd.hour == 0 && breakEnd.minute == 0)) {
       return const Duration(minutes: 0);
     }
-    
+
     final startMinutes = breakStart.hour * 60 + breakStart.minute;
     final endMinutes = breakEnd.hour * 60 + breakEnd.minute;
     final diff = endMinutes - startMinutes;
-    
+
     return Duration(minutes: diff > 0 ? diff : 0);
   }
 
@@ -844,11 +844,11 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
     if (end.hour == 0 && end.minute == 0) {
       return const Duration(minutes: 0);
     }
-    
+
     final startMinutes = start.hour * 60 + start.minute;
     final endMinutes = end.hour * 60 + end.minute;
     final totalMinutes = endMinutes - startMinutes - breakDuration.inMinutes;
-    
+
     return Duration(minutes: totalMinutes > 0 ? totalMinutes : 0);
   }
 
@@ -875,14 +875,31 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
   }
 
   String _generateNote(TimeOfDay planStart, TimeOfDay factStart, TimeOfDay planEnd, TimeOfDay factEnd) {
-    final startDiff = (factStart.hour * 60 + factStart.minute) - (planStart.hour * 60 + planStart.minute);
-    
-    if (startDiff > 0) {
-      return 'Опоздание на $startDiff';
-    } else if (startDiff < 0) {
-      return 'Пришел на ${startDiff.abs()} раньше';
-    } else {
-      return 'Выполнено в ср';
+    // Проверяем на наличие нулевых значений (TimeOfDay(hour: 0, minute: 0))
+    if (factStart.hour == 0 && factStart.minute == 0) {
+      return 'Работа не начата';
+    }
+
+    if (planStart.hour == 0 && planStart.minute == 0) {
+      return 'График не установлен';
+    }
+
+    try {
+      final startDiff = (factStart.hour * 60 + factStart.minute) - (planStart.hour * 60 + planStart.minute);
+
+      if (startDiff > 15) {
+        return 'Опоздание на ${startDiff} мин';
+      } else if (startDiff < -15) {
+        return 'Пришел на ${startDiff.abs()} мин раньше';
+      } else if (startDiff > 0) {
+        return 'Незначительное опоздание (${startDiff} мин)';
+      } else if (startDiff < 0) {
+        return 'Незначительное раннее прибытие (${startDiff.abs()} мин)';
+      } else {
+        return 'Прибыл вовремя';
+      }
+    } catch (e) {
+      return 'Ошибка расчета времени';
     }
   }
 
@@ -946,15 +963,11 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
               ),
               Padding(
                 padding: EdgeInsets.all(8),
-                child: Text('Начало (план)', style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8),
                 child: Text('Начало (факт)', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: EdgeInsets.all(8),
-                child: Text('Конец (план)', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: Text('Начало (план)', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: EdgeInsets.all(8),
@@ -962,7 +975,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
               ),
               Padding(
                 padding: EdgeInsets.all(8),
-                child: Text('Перерыв (план)', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: Text('Конец (план)', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: EdgeInsets.all(8),
@@ -970,11 +983,15 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
               ),
               Padding(
                 padding: EdgeInsets.all(8),
-                child: Text('Часы (план)', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: Text('Перерыв (план)', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: EdgeInsets.all(8),
                 child: Text('Часы (факт)', style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: Text('Часы (план)', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               Padding(
                 padding: EdgeInsets.all(8),
@@ -1016,19 +1033,19 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Text(_formatTime(item.pause_schedule)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
                   child: Text(_formatTime(item.pause)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Text(_formatDuration(Duration(minutes: item.required))),
+                  child: Text(_formatTime(item.pause_schedule)),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(_formatDuration(Duration(minutes: item.actual))),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(_formatDuration(Duration(minutes: item.required))),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8),
@@ -1051,6 +1068,7 @@ class _ManagerPageState extends State<ManagerPage> with SingleTickerProviderStat
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: Text(item.note),
+
                 ),
               ],
             );
@@ -1202,7 +1220,7 @@ class _EditEmployeeDialog extends StatefulWidget {
 class _EditEmployeeDialogState extends State<_EditEmployeeDialog> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _departmentIdController = TextEditingController();
-  
+
   List<Schedule> _schedules = [];
   Schedule? _selectedSchedule;
   bool _isLoading = false;
@@ -1224,10 +1242,10 @@ class _EditEmployeeDialogState extends State<_EditEmployeeDialog> {
   Future<void> _loadData() async {
     try {
       final schedules = await ApiService.geSchedules(null, null, null);
-      
+
       setState(() {
         _schedules = schedules.data;
-        
+
         // Устанавливаем текущее расписание сотрудника
         try {
           _selectedSchedule = _schedules.firstWhere(
@@ -1236,7 +1254,7 @@ class _EditEmployeeDialogState extends State<_EditEmployeeDialog> {
         } catch (e) {
           _selectedSchedule = _schedules.isNotEmpty ? _schedules.first : null;
         }
-        
+
         _isLoadingData = false;
       });
     } catch (e) {
@@ -1481,9 +1499,10 @@ class _EditEmployeeDialogState extends State<_EditEmployeeDialog> {
         ),
       ],
     ),
-  ],
-),
-),
-);
-}
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
 }
